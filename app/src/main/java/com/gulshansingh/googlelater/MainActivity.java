@@ -50,7 +50,7 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
             Cursor cursor = getQueryCursor();
             startManagingCursor(cursor);
             mAdapter = new SimpleCursorAdapter(this,
-                    android.R.layout.simple_list_item_checked,
+                    R.layout.list_view_row,
                     cursor,
                     new String[] { DatabaseHelper.QUERY_TEXT_COLUMN },
                     new int[] { android.R.id.text1 });
@@ -71,7 +71,9 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
                 @Override
                 public void onItemCheckedStateChanged(ActionMode mode, int position,
                                                       long id, boolean checked) {
-                    mode.setTitle("Delete " + listView.getCheckedItemCount() + " items?");
+                    int count = listView.getCheckedItemCount();
+                    String ending = count == 1 ? " item?" : " items?";
+                    mode.setTitle("Delete " + count + ending);
                 }
 
                 @Override
