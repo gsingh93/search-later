@@ -1,6 +1,8 @@
 package com.gulshansingh.googlelater;
 
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -49,6 +52,16 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
                     new int[] { android.R.id.text1 });
             final ListView listView = (ListView) findViewById(R.id.query_list);
             listView.setAdapter(mAdapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                    TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                    intent.putExtra(SearchManager.QUERY, textView.getText());
+                    startActivity(intent);
+                }
+            });
 
             listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
                 @Override
