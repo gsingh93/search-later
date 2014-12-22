@@ -21,6 +21,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private Dao<Query, Integer> queryDao = null;
+    public static final String QUERY_ID_COLUMN = "_id";
     public static final String QUERY_TEXT_COLUMN = "text";
 
     public DatabaseHelper(Context context) {

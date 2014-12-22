@@ -65,7 +65,7 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
                             List<Integer> ids = new ArrayList<Integer>();
                             try {
                                 Cursor c = getQueryCursor();
-                                int idIndex = c.getColumnIndex("_id");
+                                int idIndex = c.getColumnIndex(DatabaseHelper.QUERY_ID_COLUMN);
                                 for (int i = 0; i < listView.getCount(); i++) {
                                     if (arr.get(i)) {
                                         c.moveToPosition(i);
@@ -108,7 +108,7 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
     }
 
     private Cursor getQueryCursor() throws SQLException {
-        QueryBuilder qb = mQueryDao.queryBuilder().selectColumns("text");
+        QueryBuilder qb = mQueryDao.queryBuilder().selectColumns(DatabaseHelper.QUERY_TEXT_COLUMN);
         CloseableIterator<Query> iterator = mQueryDao.iterator(qb.prepare());
         AndroidDatabaseResults results = (AndroidDatabaseResults) iterator.getRawResults();
         return results.getRawCursor();
