@@ -1,4 +1,4 @@
-package com.gulshansingh.googlelater;
+package com.gulshansingh.searchlater;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -2,7 +2,7 @@
 # generated on 2014/12/21 11:56:34
 #
 # --table-start--
-dataClass=com.gulshansingh.googlelater.Query
+dataClass=com.gulshansingh.searchlater.Query
 tableName=queries
 # --table-fields-start--
 # --field-start--

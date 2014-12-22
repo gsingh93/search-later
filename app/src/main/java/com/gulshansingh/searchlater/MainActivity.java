@@ -1,4 +1,4 @@
-package com.gulshansingh.googlelater;
+package com.gulshansingh.searchlater;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

@@ -1,4 +1,4 @@
-package com.gulshansingh.googlelater;
+package com.gulshansingh.searchlater;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -65,7 +65,7 @@ public class ReminderService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent , 0);
 
         Notification notification = new NotificationCompat.Builder(this)
-                .setContentTitle("Google Later")
+                .setContentTitle("Search Later")
                 .setContentText("You have unsearched queries")
                 .setSmallIcon(R.drawable.ic_stat_notify)
                 .setColor(Color.DKGRAY)

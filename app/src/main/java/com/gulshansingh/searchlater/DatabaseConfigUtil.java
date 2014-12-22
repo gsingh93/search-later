@@ -1,4 +1,4 @@
-package com.gulshansingh.googlelater;
+package com.gulshansingh.searchlater;
 
 import com.j256.ormlite.android.apptools.OrmLiteConfigUtil;
 

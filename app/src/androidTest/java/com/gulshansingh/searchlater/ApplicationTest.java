@@ -1,4 +1,4 @@
-package com.gulshansingh.googlelater;
+package com.gulshansingh.searchlater;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
