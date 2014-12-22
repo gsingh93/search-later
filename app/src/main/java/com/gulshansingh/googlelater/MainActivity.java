@@ -4,12 +4,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -21,6 +25,8 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
 
@@ -37,12 +43,65 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
             Cursor cursor = getQueryCursor();
             startManagingCursor(cursor);
             mAdapter = new SimpleCursorAdapter(this,
-                    android.R.layout.simple_list_item_1,
+                    android.R.layout.simple_list_item_checked,
                     cursor,
                     new String[] { DatabaseHelper.QUERY_TEXT_COLUMN },
                     new int[] { android.R.id.text1 });
-            ListView listView = (ListView) findViewById(R.id.query_list);
+            final ListView listView = (ListView) findViewById(R.id.query_list);
             listView.setAdapter(mAdapter);
+
+            listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                @Override
+                public void onItemCheckedStateChanged(ActionMode mode, int position,
+                                                      long id, boolean checked) {
+                    mode.setTitle("Delete " + listView.getCheckedItemCount() + " items?");
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.menu_delete:
+                            SparseBooleanArray arr = listView.getCheckedItemPositions();
+                            List<Integer> ids = new ArrayList<Integer>();
+                            try {
+                                Cursor c = getQueryCursor();
+                                int idIndex = c.getColumnIndex("_id");
+                                for (int i = 0; i < listView.getCount(); i++) {
+                                    if (arr.get(i)) {
+                                        c.moveToPosition(i);
+                                        ids.add(c.getInt(idIndex));
+                                    }
+                                }
+                                mQueryDao.deleteIds(ids);
+                                mAdapter.swapCursor(getQueryCursor());
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            mode.finish();
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    // Inflate the menu for the CAB
+                    MenuInflater inflater = mode.getMenuInflater();
+                    inflater.inflate(R.menu.long_press_menu, menu);
+                    return true;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+            });
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -126,7 +185,6 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
             case R.id.action_settings:
                 return true;
             case R.id.action_new:
-
                 return true;
         }
 
