@@ -17,10 +17,11 @@ import java.sql.SQLException;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-    private static final String DATABASE_NAME = "google_later.db";
+    public static final String DATABASE_NAME = "google_later.db";
     private static final int DATABASE_VERSION = 1;
 
     private Dao<Query, Integer> queryDao = null;
+    public static final String QUERY_TEXT_COLUMN = "text";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);//, R.raw.ormlite_config);
@@ -50,10 +51,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    /**
-     * Returns the Database Access Object (DAO) for our SimpleData class. It will create it or just give the cached
-     * value.
-     */
     public Dao<Query, Integer> getDao() throws SQLException {
         if (queryDao == null) {
             queryDao = getDao(Query.class);
