@@ -53,7 +53,13 @@ public class ReminderService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.i(getClass().getName(), "Received intent");
 
-        int num_queries = PreferenceManager.getDefaultSharedPreferences(this).getInt("num_queries", 0);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!sp.getBoolean("enable_notifications", true)) {
+            Log.i(getClass().getName(), "Notifications disabled");
+            return;
+        }
+
+        int num_queries = sp.getInt("num_queries", 0);
         if (num_queries == 0) {
             Log.i(getClass().getName(), "No unsearched queries, not sending notification");
             return;
