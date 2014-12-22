@@ -10,5 +10,6 @@
         android:id="@+id/action_new"
         android:title="Add"
         android:icon="@drawable/ic_action_new"
-        app:showAsAction="always"/>
+        app:showAsAction="collapseActionView|always"
+        app:actionLayout="@layout/action_view_edit_text"/>
 </menu>
