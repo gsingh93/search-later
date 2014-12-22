@@ -1,11 +1,15 @@
 package com.gulshansingh.googlelater;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.KeyEvent;
@@ -120,6 +124,16 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
         }
     }
 
+    private void cancelAlarm() {
+        Log.i(getClass().getName(), "Cancelling alarm");
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, ReminderService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
+    }
+
     private Cursor getQueryCursor() throws SQLException {
         QueryBuilder qb = mQueryDao.queryBuilder().selectColumns(DatabaseHelper.QUERY_TEXT_COLUMN);
         CloseableIterator<Query> iterator = mQueryDao.iterator(qb.prepare());
@@ -136,6 +150,20 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ReminderService.startAlarm(this);
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("num_queries",
+                mAdapter.getCount()).commit();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        cancelAlarm();
     }
 
     @Override

@@ -25,7 +25,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public static final String QUERY_TEXT_COLUMN = "text";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);//, R.raw.ormlite_config);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
     }
 
     @Override
