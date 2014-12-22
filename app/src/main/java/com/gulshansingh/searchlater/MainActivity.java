@@ -105,7 +105,6 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
 
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    // Inflate the menu for the CAB
                     MenuInflater inflater = mode.getMenuInflater();
                     inflater.inflate(R.menu.long_press_menu, menu);
                     return true;
@@ -113,7 +112,6 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
 
                 @Override
                 public void onDestroyActionMode(ActionMode mode) {
-                    //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
                 }
 
                 @Override
@@ -191,6 +189,7 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+                editText.setText("");
                 return true;
             }
         });
