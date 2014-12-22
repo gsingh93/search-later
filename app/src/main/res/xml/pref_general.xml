@@ -5,4 +5,9 @@
         android:title="@string/pref_enable_notifications"
         android:defaultValue="true" />
 
+    <com.gulshansingh.googlelater.ReminderIntervalDialog
+        android:key="reminder_interval_dialog"
+        android:title="Reminder Interval"
+        android:summary="Interval between reminders"/>
+
 </PreferenceScreen>

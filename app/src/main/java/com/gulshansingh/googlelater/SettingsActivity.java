@@ -1,5 +1,6 @@
 package com.gulshansingh.googlelater;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -15,37 +16,33 @@ public class SettingsActivity extends PreferenceActivity {
 
     private void setupSimplePreferencesScreen() {
         addPreferencesFromResource(R.xml.pref_general);
-        bindPreferenceSummaryToValue(findPreference("enable_notifications"));
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sp.registerOnSharedPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+
+        sBindPreferenceSummaryToValueListener.onSharedPreferenceChanged(sp, "enable_notifications");
+        sBindPreferenceSummaryToValueListener.onSharedPreferenceChanged(sp, "reminder_interval_dialog");
     }
 
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener =
-            new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            if (preference.getKey().equals("enable_notifications")) {
-                Boolean b = (Boolean) value;
-                if (b) {
-                    preference.setSummary("Notifications are enabled");
-                } else {
-                    preference.setSummary("Notifications are disabled");
+    private SharedPreferences.OnSharedPreferenceChangeListener sBindPreferenceSummaryToValueListener =
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                    Preference pref = findPreference(key);
+                    if (key.equals("enable_notifications")) {
+                        boolean b = sharedPreferences.getBoolean(key, true);
+                        if (b) {
+                            pref.setSummary("Notifications are enabled");
+                        } else {
+                            pref.setSummary("Notifications are disabled");
+                        }
+                    } else if (key.equals("reminder_interval_dialog")) {
+                        SharedPreferences prefs = PreferenceManager
+                                .getDefaultSharedPreferences(getApplicationContext());
+                        int timeAmount = prefs.getInt("time_amount", 1);
+                        String timeUnit = prefs.getString("time_unit", "Days").toLowerCase();
+                        String summary = "Reminder interval time is " + timeAmount + " " + timeUnit;
+                        pref.setSummary(summary);
+                    }
                 }
-            }
-
-            return true;
-        }
-    };
-
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        Object value = null;
-        String key = preference.getKey();
-        if (key.equals("enable_notifications")) {
-            value = PreferenceManager
-                    .getDefaultSharedPreferences(preference.getContext())
-                    .getBoolean(key, true);
-        }
-
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, value);
-    }
+            };
 }
