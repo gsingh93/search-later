@@ -44,6 +44,8 @@ public class MainActivity extends OrmLiteBaseActionBarActivity<DatabaseHelper> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setIcon(R.drawable.ic_action_bar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         try {
             mQueryDao = getHelper().getDao();
